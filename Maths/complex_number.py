@@ -23,8 +23,7 @@ class complex_number:
         """
         Set this complex from radius and angle.
         """
-        self.real = radius * cosine(angle)
-        self.imaginary = radius * sine(angle)
+        self.real, self.imaginary = radius * cosine(angle), radius * sine(angle)
         return self
 
     def __repr__(self):

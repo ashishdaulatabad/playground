@@ -1,24 +1,22 @@
 
 pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164
 
-def sieve_of_eratosthenes(n) -> list:
+def sieve_of_eratosthenes(n: int) -> list:
     """
     Note that this generates a list of boolean array where ith 
     position denotes whether a number is prime or not
-
-    Optimization: 
-    - The list can be reduced by checking only odd numbers.
-    - Using bitsets instead of array of boolean
     """
     # Already marked for i = 2
-    sieve = [False if (i % 2 == 0 and i > 2 and i != 0) else True for i in range(n+1)]
+    sieve = bytearray([0b10101100] + ([0b10101010] * ((n + 6) >> 3)))    
     sqrt_n = isqrt(n)
-    for number in range(3, sqrt_n + 1):
-        # If number is marked as prime
-        if sieve[number]:
-            # Mark it's multiples as not prime
-            for marker in range(number * number, n + 1, number):
-                sieve[marker] = False
+
+    # For each number < n, 
+    # If number is marked as prime (filtered by lambda function)
+    # Mark it's multiples to composite
+    for number in filter(lambda x: sieve[x >> 3] & (1 << (x & 7)) > 0, range(3, sqrt_n + 1)):
+        for (index, mark) in map(lambda x: (x >> 3, x & 7), range(number * number, n + 1, number << 1)):
+            sieve[index] &= 255 ^ (1 << mark)
+
     return sieve
 
 def prime_with_sieve(number_list: list) -> list:
@@ -26,11 +24,11 @@ def prime_with_sieve(number_list: list) -> list:
     Return if an integer in the list is prime or not.
     To refer how sieve works, refer sieve_of_eratosthenes function
 
-    >>> prime_with_sieve([2, 11, 22, 33, 41, 68, 97, 8831, 8849, 8850])
-    [True, True, False, False, True, False, True, True, True, False]
+    >>> prime_with_sieve([2, 11, 22, 33, 41, 68, 97, 8831, 8849, 8850, 1299709])
+    [True, True, False, False, True, False, True, True, True, False, True]
     """
     sieve = sieve_of_eratosthenes(max(number_list) + 1)
-    return [sieve[number] for number in number_list]
+    return [sieve[number >> 3] & (1 << (number & 7)) > 0 for number in number_list]
 
 def segmented_sieve(left: int, right: int) -> list:
     """
@@ -144,12 +142,14 @@ def linear_recurrence(coefficient: list, base_cases: int, n: int, mod=0) -> int:
 def sqrt_bin_search(n: int) -> int:
     """
     Evaluates integer square root by using binary search,
-    therefore, takes `O(n)` time.
+    therefore, takes `O(log n)` time.
     >>> sqrt_bin_search(25)
     5
     >>> sqrt_bin_search(100)
     10
     >>> sqrt_bin_search(65)
+    8
+    >>> sqrt_bin_search(80)
     8
     """
     if n == 1: return 1
@@ -162,6 +162,7 @@ def sqrt_bin_search(n: int) -> int:
             high = mid - 1
         else:
             return mid
+
     return low
 
 def isqrt(n: int) -> int:
@@ -285,7 +286,7 @@ def sine(x: float) -> float:
             break
         answer += add_by
         iter += 2
-    return round(answer, 16)
+    return round(answer, 12)
 
 def cosine(x: float) -> float:
     """

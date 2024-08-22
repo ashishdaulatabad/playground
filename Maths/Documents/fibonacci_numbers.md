@@ -121,7 +121,7 @@ F_{m+n-1} & F_{m+n}\\
 F_{m+n} & F_{m+n+1}
 \end{bmatrix}&=&\begin{bmatrix}
 F_{n-1}F_{m-1}+F_m F_n & F_{n-1}F_m+F_nF_{m+1}\\
-F_nF_{m-1}+F_{n+1}F_m & F_{n+1}F_m+F_{n+1}F_{m+1}
+F_nF_{m-1}+F_{n+1}F_m & F_nF_m+F_{n+1}F_{m+1}
 \end{bmatrix}\\ \\
 \implies F_{m+n}&=&F_{n-1}F_m+F_{n}F_{m+1}
 \end{array}
@@ -133,7 +133,7 @@ $$
 \begin{array}{cl}
 F_{2n}&=&F_n\cdot (F_{n-1}+F_{n+1})\\
 &=&F_n\cdot(2F_{n-1}+F_n)\\ \\
-F_{2n+1}&=&F_{n-1}F_{n+1}+F_nF_{n+2}\\
+F_{2n+1}&=&F_n^2+F_{n+1}^2\\
 \end{array}
 $$
 
@@ -147,7 +147,7 @@ def fibonacci_recursive_2(n: int) -> int:
     
     ```
     f(n) = f(n >> 1) * (f(n >> 1) + 2 * f((n >> 1) - 1));    n > 1, n % 2 == 0
-         = f(n - 1) + f(n - 2);                              n > 1, n % 2 == 1
+         = f((n >> 1) + 1) ** 2 + f(n >> 1) ** 2;            n > 1, n % 2 == 1
          = 1;                                                n == 1
          = 0;                                                n == 0
     ```
@@ -165,7 +165,9 @@ def fibonacci_recursive_2(n: int) -> int:
     if n <= 1:
         return n
     elif n & 1 == 1:
-        return fibonacci_recursive_2(n - 1) + fibonacci_recursive_2(n - 2)
+        fn_2 = fibonacci_recursive_2(n >> 1)
+        fn_2_p_1 = fibonacci_recursive_2((n >> 1) + 1)
+        return fn_2 ** 2 + fn_2_p_1 ** 2
     
     fn = fibonacci_recursive_2(n >> 1)
     return fn * (2 * fibonacci_recursive_2((n >> 1) - 1) + fn)

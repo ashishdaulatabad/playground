@@ -47,11 +47,12 @@ def longest_valid_parantheses(string: str) -> int:
         return memo[position]
 
     memo, max_value = {}, 0
-    for x in range(len(string)-1, 0, -1):
-        if x not in memo:
-            longest_valid_parentheses_recursive(memo, string, x)
-    for index, value in memo.items():
+    for x in filter(lambda x: x not in memo, range(len(string)-1, 0, -1)):
+        longest_valid_parentheses_recursive(memo, string, x)
+
+    for _, value in memo.items():
         max_value = max(max_value, value)
+
     return max_value
 
 def rob(nums: list) -> int:
@@ -134,21 +135,22 @@ def subset_sum_divisibility(array: list, m: int) -> bool:
     >>> subset_sum_divisibility([4, 6, 8, 8, 10, 10, 2, 3, 8, 14, 14, 3], 8)
     True
     """
-    def subset_sum_memo(memo: dict, array: list, sum: int, m: int, index: int) -> bool:
-        if sum and sum % m == 0:
+    def subset_sum_memo(memo: dict, array: list, sm: int, m: int, index: int) -> bool:
+        if sm and sm % m == 0:
             return True
         elif index >= len(array):
             return False
         else:
             value1, value2 = False, False
-            if sum % m not in memo:
-                value1 = subset_sum_memo(memo, array, sum + array[index], m, index + 1)
-                value2 = subset_sum_memo(memo, array, sum, m, index + 1)
-                if sum:
-                    memo[sum % m] = value1 or value2
-            if not sum:
+            if sm % m not in memo:
+                value1 = subset_sum_memo(memo, array, sm + array[index], m, index + 1)
+                value2 = subset_sum_memo(memo, array, sm, m, index + 1)
+                if sm:
+                    memo[sm % m] = value1 or value2
+
+            if not sm:
                 return value1 or value2
-            return memo[sum % m]
+            return memo[sm % m]
 
     if len(array) > m:
         return True

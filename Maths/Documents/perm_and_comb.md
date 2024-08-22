@@ -28,6 +28,7 @@ main = do
 4. Grouping objects, number of permutations where $k < r$ objects are grouped together: $P=\dfrac{(n-k+1)!}{(n-r)!}\cdot k!$
 5. Permutation with repitition: selecting $n$ objects: $n^n$; selecting $r$ out of $n$ objects: $n^r$.
 
+___
 ## Combination:
 Combination is a selection of $r$ elements out of $n$ elements. Here, order of element do not matter.
 
@@ -80,6 +81,7 @@ pub fn test_ncr_memoize() {
 ## Some results
 1. In an equation: $E=(a_{11}+a_{12}+\ldots+a_{1k_1})\cdot (a_{21}+a_{22}+\ldots+a_{2k_2})\cdots(a_{m1}+a_{m2}+\ldots+a_{mk_m})$, total terms generated are: $k_1\cdot k_2\cdot k_3\cdots k_m=\prod\limits_{i=1}^mk_i$. A particular case is [[perm_and_comb#Multinomial expansion|multinomial expansion]], where a sequence of number to the power $n$ is performed.
 2. An integer number defined as product of primes to a certain power: $n=p_1^{k_1}\cdot p_2^{k_2}\cdots p_m^{k_m}$: has total $\prod\limits_{i=1}^m(k_i+1)$ values that divides $n$.
+___
 ## Expansion
 ### Binomial Expansion:
 For term $(a+b)^n=B$, we'll simplify the solution:
@@ -186,6 +188,7 @@ Increasing power of $a$ step by step:
 - ... and so on till $a=n$.
 $\therefore\quad\text{Total Terms}=1+2+3+\ldots+(n+1)=\dfrac{(n+1)(n+2)}2$.
 
+___
 ## Pascal pyramid
 This is an extension of pascal triangle into a $3$-dimensional like structure called pascal pyramid.
 The generator for this pascal pyramid:
@@ -325,6 +328,7 @@ int main () {
 }
 ```
 
+___
 # Multinomial expansion:
 Generalizing above value, we've
 
@@ -356,7 +360,7 @@ P(n,k_1,k_2,\ldots,k_m)=\begin{cases}
 $$
 
 The first expression simply returns $1$ if it's the tip or one of the corner vertices of a $n$-dimensional tetrahedron.
-
+___
 # Derangement of a permutation.
 Given a set $A$, we're finding total arrangement where none of the values are in their original position.
 
@@ -392,6 +396,7 @@ $$
 
 This happens when $n$ is too big of a number or $n\rightarrow \infty$.
 A good explaination is also given on [wikipedia](https://en.wikipedia.org/wiki/Derangement#Derivation_by_inclusion%E2%80%93exclusion_principle).
+___
 
 ```rust
 fn derangement(n: usize) -> u128 {

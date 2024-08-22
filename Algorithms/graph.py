@@ -12,9 +12,8 @@ def depth_first_search(adj_matrix: dict, start_vertex):
         visited[start_vertex] = True
         print(start_vertex)
         # perform some operations. Maybe printing
-        for next_vertex in matrix[start_vertex]:
-            if not visited[next_vertex]:
-                recursive_depth_first_search(matrix, next_vertex)
+        for next_vertex in filter(lambda nvertex: not visited[nvertex], matrix[start_vertex]):
+            recursive_depth_first_search(matrix, next_vertex)
     
     def iterative_depth_first_search(matrix: dict, start_vertex):
         """
@@ -28,11 +27,7 @@ def depth_first_search(adj_matrix: dict, start_vertex):
             # perform some operation
             print(vertex)
             visited[vertex] = True
-            # Faster way for python:
-            # stack.extend([next_vertex for next_vertex in matrix[start_vertex] if not visited[next_vertex]])
-            for next_vertex in matrix[start_vertex]:
-                if not visited[next_vertex]:
-                    stack.append(next_vertex)
+            stack.extend([next_vertex for next_vertex in filter(lambda v: not visited[v], matrix[start_vertex])])
 
     return iterative_depth_first_search(adj_matrix, start_vertex)
 
@@ -59,13 +54,12 @@ def breadth_first_search(matrix: dict, start_vertex: int):
             # Generally, vertex operations are done here.
             answer.append(current_vertex)
 
-            for next_vertex in graph[current_vertex]:
-                if not visited[next_vertex]:
-                    visited[next_vertex] = True
-                    # although the current shows only vertex info, we
-                    # can put different info with it as well, depending 
-                    # on user preferences.
-                    queue.append(next_vertex)
+            for next_vertex in filter(lambda nvertex: not visited[nvertex], graph[current_vertex]):
+                visited[next_vertex] = True
+                # although the current shows only vertex info, we
+                # can put different info with it as well, depending 
+                # on user preferences.
+                queue.append(next_vertex)
         return answer
 
     return bfs(matrix, start_vertex)
@@ -79,25 +73,23 @@ def is_bipartite(graph: list[list[int]]) -> bool:
     n = len(graph)
     # Color array set for each of the vertices
     colors = [-1]*n
-    for x in range(n):
-        # If the vertex is not marked as visited
-        if colors[x] == -1:
-            # we traverse through vertex x and it's neighbors
-            stack = [(x, 0)]
-            while stack:
-                v, c = stack.pop()
-                # Assign the color to the vertex
-                colors[v] = c
-                # Neighbors should be marked as different colors
-                for next_v in graph[v]:
-                    # If not visited, then assign the next color
-                    if colors[next_v] == -1:
-                        stack.append([next_v, 1-c])
-                    # If the color is the same as the current vertex, then
-                    # this graph cannot be divided into two values.
-                    # Return false.
-                    elif colors[next_v] == c:
-                        return False
+    for x in filter(lambda vertex: colors[vertex] == -1, range(n)):
+        # we traverse through vertex x and it's neighbors
+        stack = [(x, 0)]
+        while stack:
+            v, c = stack.pop()
+            # Assign the color to the vertex
+            colors[v] = c
+            # Neighbors should be marked as different colors
+            for next_v in graph[v]:
+                # If not visited, then assign the next color
+                if colors[next_v] == -1:
+                    stack.append([next_v, 1-c])
+                # If the color is the same as the current vertex, then
+                # this graph cannot be divided into two values.
+                # Return false.
+                elif colors[next_v] == c:
+                    return False
     # If each vertex are colored, then
     # return true
     return True
@@ -372,9 +364,8 @@ def prims_algorithm(adj_matrix: list, start_vertex: int, total_vertices: int):
                 pairs.append((prev_vertex, vertex, cost))
         
             # Insert the adjacent values in priority queue
-            for next_vertex, next_cost in adj_matrix[vertex]:
-                if next_vertex not in visited_vertices:
-                    pq.push((vertex, next_vertex, next_cost))
+            for next_vertex, next_cost in filter(lambda nv: nv not in visited_vertices, adj_matrix[vertex]):
+                pq.push((vertex, next_vertex, next_cost))
     
     return total_cost, pairs
 
@@ -391,13 +382,14 @@ def topological_sorting(adj_matrix: list) -> list:
         after sorting, insert the current vertex.
         """
         if vertex in cycle_check:
-            return None
+            return False
+
         visited[vertex] = True
         cycle_check.add(vertex)
-        for next_vertex in adj_matrix[vertex]:
-            if not visited[next_vertex]:
-                if depth_first_search_sorting(next_vertex, visited, adj_matrix, sorted_vertex, cycle_check) is None:
-                    return None
+
+        for next_vertex in filter(lambda nvertex: not visited[nvertex], adj_matrix[vertex]):
+            if depth_first_search_sorting(next_vertex, visited, adj_matrix, sorted_vertex, cycle_check) is None:
+                return False
 
         sorted_vertex.append(vertex)
         return True
@@ -405,11 +397,9 @@ def topological_sorting(adj_matrix: list) -> list:
     visited = { key: False for key in range(len(adj_matrix)) }
 
     sorted_vertex = []
-    for vertex in range(len(adj_matrix)):
-        if not visited[vertex]:
-            cycle_check = set()
-            if depth_first_search_sorting(vertex, visited, adj_matrix, sorted_vertex, cycle_check) is None:
-                return None
+    for vertex in filter(lambda v: not visited[v], range(len(adj_matrix))):
+        if not depth_first_search_sorting(vertex, visited, adj_matrix, sorted_vertex, set()):
+            return None
 
     sorted_vertex = reversed(sorted_vertex)
     return sorted_vertex

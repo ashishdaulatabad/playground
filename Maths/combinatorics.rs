@@ -8,15 +8,11 @@ fn factorial(n: usize) -> u128 {
 }
 
 fn derangement(n: usize) -> u128 {
-    let mut result: i128 = 0;
-    let mut mul = 1;
-    let mut sign: i128 = if n & 1 == 0 { 1 } else { -1 };
-    for x in ((0 as i128)..=(n as i128)).rev() {
-        result += sign * mul;
-        sign = -sign;
-        mul *= x;
-    }
-    result as u128
+    (0..=n).rev()
+        .map(|x| x as i128)
+        .fold((0_i128, 1_i128, if n & 1 == 0 { 1 } else { -1 }), |(res, mul, sgn), term| {
+            (res + sgn * mul, mul * term, -sgn)
+        }).0 as u128
 }
 
 fn ncr(n: usize, r: usize) -> u128 {

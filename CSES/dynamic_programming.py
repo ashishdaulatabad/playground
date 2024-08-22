@@ -23,8 +23,8 @@ def minimizing_coins(n: int, x: int, c: list) -> int:
     minimal_coins = [0] + [100000000] * x
     for st in c:
         for val in range(st, x + 1):
-            minimal_coins[val] = min(
-                minimal_coins[val], minimal_coins[val - st] + 1)
+            minimal_coins[val] = min(minimal_coins[val], minimal_coins[val - st] + 1)
+
     return minimal_coins[x] if minimal_coins[x] <= x else -1
 
 if __name__ == "__main__":

@@ -30,7 +30,8 @@ def preprocess(array: list, q_function) -> list:
     n = len(array)
     sqrt_array_len = int(sqrt(n))
     loop = sqrt_array_len + (0 if (floor(sqrt(n)) == sqrt(n)) else 1)
-    return [q_function(array[ i * sqrt_array_len : min((i + 1) * sqrt_array_len, n)]) for i in range(loop)]
+    slice_ret = lambda i: q_function(array[i * sqrt_array_len : min((i + 1) * sqrt_array_len, n)])
+    return list(map(lambda i: slice_ret(i), range(loop)))
 
 def sqrt_decomposition_solve_queries(array: list, queries: list, q_function) -> list:
     """

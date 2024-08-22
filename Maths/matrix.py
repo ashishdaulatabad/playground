@@ -300,11 +300,15 @@ class matrix:
 
         return self.default_multiplication(second_matrix)
 
-    def __identity__(self, size):
+    @staticmethod
+    def __identity__(size: int):
         """
         Return identity matrix
+        >>> matrix.__identity__(2)
+        [1, 0]
+        [0, 1]
         """
-        return matrix([[1 if i == j else 0 for j in range(size)] for i in range(size)])
+        return matrix(list(map(lambda x: [0] * x + [1] + [0] * (size - 1 - x), range(size))))
 
     def __set_identity__(self):
         """
@@ -322,7 +326,8 @@ class matrix:
         """
         assert len(self.mat[0]) == len(a.mat)
         if isinstance(a, float) or isinstance(a, int):
-            return [[a*self.mat[i][j] for j in range(len(self.mat[i]))] for i in range(len(self.mat))]
+            rowlen, collen = len(self.mat), len(self.mat[0])
+            return matrix([[a * elem for elem in row] for row in self.mat])
         else:
             return self.strassen_multiplication(a)
 

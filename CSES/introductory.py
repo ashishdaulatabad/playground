@@ -50,10 +50,10 @@ def increasing_array(n: int, array: list) -> int:
     0
     """
     count = 0
-    for i in range(1, len(array)):
-        if array[i] < array[i - 1]:
-            count += (array[i - 1] - array[i])
-            array[i] = array[i - 1]
+    for i in filter(lambda x: array[x] < array[x - 1], range(1, len(array))):
+        count += (array[i - 1] - array[i])
+        array[i] = array[i - 1]
+
     return count
 
 def permutations(n: int):
@@ -518,9 +518,8 @@ def grid_paths(string: str) -> int:
         return 88418
     elif 2 * i >= 48:
         idx.reverse()
-        for m in range(48):
-            if idx[m] <= 1:
-                idx[m] = 1 - idx[m]
+        for m in filter(lambda m: idx[m] <= 1, range(48)):
+            idx[m] = 1 - idx[m]
 
     idx = tuple(idx)
 

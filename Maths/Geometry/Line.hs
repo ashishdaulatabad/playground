@@ -13,15 +13,9 @@ instance Show Line2d where
 
 -- Return coefficient of given line if defined by two points
 toCoeffValue :: Line2d -> (Double, Double, Double)
-toCoeffValue line = (a, b, c)
-  where
-    (a, b, c) = do
-      case line of
-        Coeff2d a b c -> (a, b, c)
-        Line2d p1 p2 -> (y1 - y2, x2 - x1, y2 * x1 - x2 * y1)
-          where
-            (x1, y1) = case p1 of Point2d x1 y1 -> (x1, y1)
-            (x2, y2) = case p2 of Point2d x2 y2 -> (x2, y2)
+toCoeffValue line = case line of
+  Coeff2d a b c -> (a, b, c)
+  Line2d (Point2d x1 y1) (Point2d x2 y2) -> (y1 - y2, x2 - x1, y2 * x1 - x2 * y1)
 
 slope :: Line2d -> Double
 slope line = -a / b
@@ -60,10 +54,9 @@ neq line1 line2 = (a2 / a1 /= b2 / b1) || (b2 / b1 /= c2 / c1)
     (a2, b2, c2) = toCoeffValue line2
 
 perpendicularLine :: Line2d -> Point2d -> Line2d
-perpendicularLine line throughPoint = Coeff2d b (-a) (a * y - b * x)
+perpendicularLine line throughPoint@(Point2d x y) = Coeff2d b (-a) (a * y - b * x)
   where
     (a, b, _) = toCoeffValue line
-    (x, y) = case throughPoint of Point2d x y -> (x, y)
 
 angleBetweenLines :: Line2d -> Line2d -> Double
 angleBetweenLines line1 line2
@@ -74,16 +67,14 @@ angleBetweenLines line1 line2
     m2 = slope line2
 
 substitute :: Line2d -> Point2d -> Double
-substitute line point = a * x + b * y + c
+substitute line (Point2d x y) = a * x + b * y + c
   where
-    (x, y) = case point of Point2d x y -> (x, y)
     (a, b, c) = toCoeffValue line
 
 testForPoint :: Line2d -> Point2d -> Bool
-testForPoint line point = a * x + b * y + c < 1e-9
+testForPoint line (Point2d x y) = a * x + b * y + c < 1e-9
   where
     (a, b, c) = toCoeffValue line
-    (x, y) = case point of Point2d x y -> (x, y)
 
 linePointDist :: Line2d -> Point2d -> Double
 linePointDist line point = abs (substitute line point / sqrtDouble (a * a + b * b))
@@ -91,10 +82,9 @@ linePointDist line point = abs (substitute line point / sqrtDouble (a * a + b * 
     (a, b, _) = toCoeffValue line
 
 linePointDistIntersectionPoint :: Line2d -> Point2d -> Point2d
-linePointDistIntersectionPoint line point = intersection line (Coeff2d (-b) a (b * x - a * y))
+linePointDistIntersectionPoint line (Point2d x y) = intersection line (Coeff2d (-b) a (b * x - a * y))
   where
     (a, b, _) = toCoeffValue line
-    (x, y) = case point of Point2d x y -> (x, y)
 
 parallelLineDist :: Line2d -> Line2d -> Double
 parallelLineDist line1 line2
