@@ -20,15 +20,15 @@ def build(array: list, combine) -> list:
         seg_tree_array[x] = combine(seg_tree_array[(x << 1) + 1], seg_tree_array[(x << 1) + 2])
     return seg_tree_array
 
-def query( seg_tree_array: list, left: int, right: int, n: int, init: int, combine):
+def query(seg_tree_array: list, left: int, right: int, n: int, init: int, combine):
     """
     Query on segment tree
     :init is the initial value of result
-            
+
               36
          10         26
       3     7    11    15
-    1  2  3  4  5  6  7  8        
+    1  2  3  4  5  6  7  8
 
     >>> arr = [1, 2, 3, 4, 5, 6, 7, 8]
     >>> sum_f =  lambda a, b: a + b

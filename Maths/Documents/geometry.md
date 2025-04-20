@@ -25,7 +25,7 @@ Finding similarities with equation $y=mx+c$ :
 $$
 \begin{matrix}
 y&=&\dfrac{y_2-y_1}{x_2-x_1}\cdot x+\dfrac{x_1\cdot y_1-x_1\cdot y_2}{x_2-x_1}+y_1\\
-&=&\dfrac{y_2-y_1}{x_2-x_1}\cdot x+\dfrac{x_2\cdot y1-x_1\cdot y_2}{x_2-x_1}\\
+&=&\dfrac{y_2-y_1}{x_2-x_1}\cdot x+\dfrac{x_2\cdot y_1-x_1\cdot y_2}{x_2-x_1}\\
 &=&m\cdot x+c
 \end{matrix}
 $$

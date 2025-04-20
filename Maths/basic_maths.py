@@ -29,12 +29,16 @@ def power(number, exponent: int) -> int:
     Evaluates number raise to exponent in O(logn), where logn is logarithm of number
     n to the base 2
 
+    >>> power(2, 1)
+    2
+    >>> power(12, 0)
+    1
     >>> power(2, 20)
     1048576
-
+    >>> power(3, 22) == 3 ** 22
+    True
     >>> power(33, 39)
     166741481249649316381381371919564410409316111826611678288097
-
     >>> power('abc', 38)
     Traceback (most recent call last):
         ...
@@ -44,12 +48,18 @@ def power(number, exponent: int) -> int:
         raise TypeError('Number is of type %s' % type(number))
     if type(number) is not int and type(number) is not float:
         raise TypeError('Number is of type %s' % type(number))
+
+    exp_power = 1
+    while exponent > exp_power: exp_power <<= 1
+    if exp_power > exponent: exp_power >>= 1
+
     result = 1
-    while exponent > 0:
-        if exponent & 1:
+    while exp_power > 0:
+        result *= result
+        if exponent & exp_power > 0:
             result *= number
-        number *= number
-        exponent >>= 1
+        exp_power >>= 1
+
     return result
 
 def mod_power(number, exponent: int, mod: int) -> int:
@@ -115,7 +125,7 @@ def extended_euclidean_gcd(a: int, b: int):
     The algorithm represents the gcd(a, b) in the form
     a.x + b.y = gcd(a, b): A form of diophantine equation
     ```
-    Starting 
+    Starting
     x, y   = 1, 0
     x1, y1 = 0, 1
     a1, b1 = a, b
@@ -185,7 +195,7 @@ def number_factors(n: int) -> list:
 def factorial(n: int) -> int:
     """
     Returns the factorial of a number
-    Factorial is defined as 
+    Factorial is defined as
     ```
     f(n) = n! = n x (n-1) x (n-2) x ... x 3 x 2 x 1
     f(0) = 0! = 1  (special condition)
@@ -200,18 +210,18 @@ def factorial(n: int) -> int:
 def phi(n: int) -> int:
     """
     Phi: Also known as euler totient function calculates
-    number of integers < n which are co-prime to n. 
-    
+    number of integers < n which are co-prime to n.
+
     => `gcd(i, n) = 1` for all `1 <= i < n`
 
     Some observations:
     ```
     phi(p1*p2) = phi(p1) * phi(p2), where `p1` and `p2` are relatively prime
                = phi(p1) * phi(p2) * d/phi(d), when `p1` and `p2` are not co-prime,
-    
+
     where d = gcd(p1, p2)
     ```
-    
+
     >>> phi(7)
     6
     >>> phi(41)

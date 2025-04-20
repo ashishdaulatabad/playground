@@ -137,7 +137,6 @@ F_{2n+1}&=&F_n^2+F_{n+1}^2\\
 \end{array}
 $$
 
-The first one involves fewer terms.
 
 ```python
 def fibonacci_recursive_2(n: int) -> int:
