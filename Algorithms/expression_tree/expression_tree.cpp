@@ -66,24 +66,24 @@ std::tuple<size_t, StringView> parse_number2(const std::string &expr, size_t sta
     switch (expr[i]) {
       case '0'...'9': {
         if (!decimal_encounter && !exp_read) {
-            value *= 10;
+          value *= 10;
         } else if (decimal_encounter && !exp_read) {
-            denom *= 10;
+          denom *= 10;
         } else {
-            exp_value *= 10;
+          exp_value *= 10;
         }
 
         if (!exp_read) {
-            value += ((expr[i++] - '0') / denom);
+          value += ((expr[i++] - '0') / denom);
         } else {
-            exp_value += (expr[i++] - '0');
+          exp_value += (expr[i++] - '0');
         }
         break;
       }
 
       case '-': {
         if (exp_read && any_one(expr[i - 1], 'e', 'E')) {
-            negative_exp = true;
+          negative_exp = true;
         }
         ++i;
         break;
@@ -242,28 +242,28 @@ ASTree create_expression_tree(const std::vector<Token::Token> &tokens) {
   for (auto &token: tokens) {
     switch (token.operation_type) {
       case OperationType::ParenthesisClose: {
-          break;
+        break;
       }
 
       case OperationType::ParenthesisOpen: {
-          break;
+        break;
       }
 
       case OperationType::Number: {
-          break;
+        break;
       }
 
       case OperationType::Add ... OperationType::Power: {
-          break;
+        break;
       }
 
       case OperationType::Logarithm ... OperationType::Csc: {
-          break;
+        break;
       }
 
       case OperationType::Invalid:
       case OperationType::Nil: {
-          break;
+        break;
       }
     }
   }

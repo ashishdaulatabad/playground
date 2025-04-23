@@ -119,6 +119,8 @@ pub fn quick_sort_cmp<T: std::cmp::PartialOrd + Copy>(
 ) {
   let mut sort_stack: Vec<(usize, usize)> = Vec::new();
   sort_stack.push((0, array.len() - 1));
+  let block_size = 16;
+
   while sort_stack.len() > 0 {
     let (mut i, j) = sort_stack.pop().unwrap();
  
@@ -126,7 +128,7 @@ pub fn quick_sort_cmp<T: std::cmp::PartialOrd + Copy>(
       continue;
     }
 
-    if j - i > 16 {
+    if j - i > block_size {
       let pivot = array[i];
       let pivot_index = i;
       i = i + 1;
@@ -247,10 +249,10 @@ pub fn test_quick() {
   assert_eq!(s, [1, 2, 4, 3, 5, 6, 132, 556, 123]);
 }
 
-// A non-recursive merge sort
-// At base insertion sort is used (for e.g., subarray of window size 16),
-// and then working way upto larger sizes until we're in final stage of merging two
-// array partitions
+/// A non-recursive merge sort
+/// At base insertion sort is used (for e.g., subarray of window size 16),
+/// and then working way upto larger sizes until we're in final stage of merging two
+/// array partitions
 pub fn merge_sort<
   T: std::cmp::PartialOrd + Copy + std::default::Default + std::convert::From<T>,
 >(

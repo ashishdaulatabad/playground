@@ -1,4 +1,4 @@
-from math import sqrt, floor, ceil
+from math import sqrt, floor
 
 def segregate(arr: list, condition):
     """
@@ -10,10 +10,18 @@ def segregate(arr: list, condition):
     """
     if condition is None:
         raise Exception('No proper condition defined')
+
     i, j = 0, len(arr) - 1
+
     while i < j:
-        while i < j and condition(arr[i]): i += 1
-        while i < j and not condition(arr[j]): j -= 1
+        while i < j and condition(arr[i]):
+            i += 1
+        while i < j and not condition(arr[j]):
+            j -= 1
+
+        if i >= j:
+            break
+
         arr[i], arr[j] = arr[j], arr[i]
     return arr
 
@@ -82,10 +90,11 @@ def sqrt_decomposition_solve_queries(array: list, queries: list, q_function) -> 
             # Capture remaining by sqrt_array
             if sleft < sright:
                 if value is not None:
-                    value = q_function([value, q_function(sqrt_array[sleft:sright])]) #
+                    value = q_function([value, q_function(sqrt_array[sleft:sright])])
                 else:
                     value = q_function(sqrt_array[sleft:sright])
             query_answers.append(value)
+
     return query_answers
 
 def difference_array_queries(array: list, diff_array: list, queries: list, operation, inv_operation) -> list:
@@ -177,17 +186,18 @@ def difference_array_and_queries(array: list, queries: list) -> list:
         the array is the same as current_bits_set and sets those
         bits accordingly.
         """
-        integer = 0
         for index in range(32):
             current_bits_set[index] += bits_set[index]
+        integer = 0
         for index in range(31, -1, -1):
             integer <<= 1
             if current_bits_set[index] == total_integers:
                 integer ^= 1
+
         return integer
+
     # Set bits take O(logn) time
     # Construct bits takes O(logn) time
-
     # assuming the integer bit-size is 32
     bits_set = [[0]*32 for i in range(len(array))]
     
@@ -203,6 +213,7 @@ def difference_array_and_queries(array: list, queries: list) -> list:
     result = []
     current_bits_set = [0]*32
     total_integers = 0
+
     for index, values in enumerate(integers_added):
         total_integers += values
         integer = construct_bits(total_integers, current_bits_set, bits_set[index])

@@ -1,4 +1,4 @@
-class tree_node:
+class TreeNode:
     """
     A tree node that contains data, and references to
     two other similar nodes, by left and right value
@@ -6,7 +6,7 @@ class tree_node:
     def __init__(self, data=None):
         self.data, self.left, self.right = data, None, None
 
-class binary_search_tree:
+class BinSearchTree:
     """
     Simple utils for binary search tree. Value to the 
     left child is smaller than parent value and value 
@@ -29,24 +29,27 @@ class binary_search_tree:
         Traverses till it gets the right node to attach to
         """
         if self.root_node is None:
-            self.root_node = tree_node(data)
+            self.root_node = TreeNode(data)
             return self
+
         traverse = self.root_node
-        while True:
+
+        while traverse:
             if data > traverse.data:
                 if traverse.right is None:
-                    traverse.right = tree_node(data)
+                    traverse.right = TreeNode(data)
                     break
                 else:
                     traverse = traverse.right
             elif data < traverse.data:
                 if traverse.left is None:
-                    traverse.left = tree_node(data)
+                    traverse.left = TreeNode(data)
                     break
                 else:
                     traverse = traverse.left
             else:
                 break
+
         return self
     
     def tree_contains(self, data: any):
@@ -55,22 +58,12 @@ class binary_search_tree:
         `data`
         :returns node if contains the exact data, else None 
         """
-        if self.root_node is None:
-            return None
         traverse = self.root_node
-        while True:
-            if data > traverse.data:
-                if traverse.right is None:
-                    return None
-                else:
-                    traverse = traverse.right
-            elif data < traverse.data:
-                if traverse.left is None:
-                    return None
-                else:
-                    traverse = traverse.left
-            else:
-                return traverse
+
+        while traverse is not None and traverse.data != data:
+            traverse = traverse.left if data < traverse.data else traverse.right
+            
+        return traverse
 
     def __contains__(self, data: any) -> bool:
         """
@@ -87,7 +80,9 @@ class binary_search_tree:
         """
         if self.root_node is None:
             return None
+
         traverse, parent = self.root_node, None
+
         while traverse is not None:
             if data > traverse.data:
                 parent = traverse
@@ -97,6 +92,7 @@ class binary_search_tree:
                 traverse = traverse.left
             else:
                 break
+
         if traverse is None:
             return None
         # If the node to delete is the root node.
@@ -139,8 +135,10 @@ class binary_search_tree:
                     parent.right = traverse.left
                 # attach right child to traverse.left => rightmost children
                 child_of_del_node = traverse.left
+
                 while child_of_del_node.right is not None:
                     child_of_del_node = child_of_del_node.right
+
                 child_of_del_node.right = traverse.right
                 traverse.left = traverse.right = None
         # delete the node.
@@ -238,7 +236,7 @@ def postorder(root_node):
         print(root_node.data)
 
 if __name__ == "__main__":
-    tr = binary_search_tree()
+    tr = BinSearchTree()
     tr += 5
     tr += 3
     tr += 4
