@@ -89,20 +89,20 @@ $$
 S(A,i) = \sum\limits_{k=i}^{\text{|A|}}A_k
 $$
 
-These are called **suffix sums**. Generalizing this: prefix operations for subsegment $A[0\ldots i]$
+These are called **suffix sums**. Generalizing this: prefix operations for sub-segment $A[0\ldots i]$
 
-$$\text{pf}(A_i) = f(A_0,\ A_1,\ \ldots,\ A_i)$$
+$$\text{pf}(A,i) = f(A_0,\ A_1,\ \ldots,\ A_i)$$
 
-and suffix operations for subsegment $A[i\ldots n]$
+and suffix operations for sub-segment $A[i\ldots n]$
 
 $$
-\text{sf}(A_i) = f(A_i,\ A_{i+1},\ \ldots,\ A_n)
+\text{sf}(A,i) = f(A_i,\ A_{i+1},\ \ldots,\ A_n)
 $$
 
 where 
 
 $$
-pf=sf=\begin{cases}
+\text{pf}=\text{sf}=\begin{cases}
 \sum, & \text{summation}\\
 \prod, & \text{product}\\
 \bigwedge, & \text{and}\\
@@ -117,14 +117,14 @@ pf=sf=\begin{cases}
 $$
 
 To find sub-array values $a[i\ldots j]$, a function should have an inverse operator.
-For e.g., For sum of subarray: subtraction is an inverse $-$ operator.
+For e.g., For sum of sub-array: subtraction is an inverse $-$ operator.
 
 $$
 \sum\limits_{k=i}^{j}a_k=\sum\limits_{k=0}^{j}a_k-\sum\limits_{k=0}^{i}a_k
 $$
 
 Similarly, for $\prod$, division is the inverse, for $\oplus$ (xor), the inverse is xor operator.
-Otherwise, user need to make a work-around/evaluate $f$ for other function everytime.
+Otherwise, user need to make a work-around/evaluate $f$ for other function every time.
 
 #### Using two-pointers
 - Segregate values: an array:

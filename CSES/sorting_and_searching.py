@@ -104,8 +104,7 @@ def restaurant_customers(times: list) -> int:
             self.heap_array = []
             if comparison_operator is not None:
                 self.comparison_operator = comparison_operator
-            else:
-                # Max heap
+            else: # Max heap
                 self.comparison_operator = lambda root, child: root >= child
 
         def push(self, item):
@@ -143,7 +142,7 @@ def restaurant_customers(times: list) -> int:
                     break
 
         def pop(self):
-            if len(self.heap_array) == 0:
+            if not self.heap_array:
                 return None
             self.heap_array[0], self.heap_array[-1] = self.heap_array[-1], self.heap_array[0]
             item_to_return = self.heap_array.pop()
@@ -151,9 +150,7 @@ def restaurant_customers(times: list) -> int:
             return item_to_return
 
         def top(self):
-            if self.heap_array:
-                return self.heap_array[0]
-            return None
+            return self.heap_array[0] if self.heap_array else None
 
         def __len__(self):
             return len(self.heap_array)

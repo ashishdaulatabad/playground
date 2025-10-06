@@ -1,5 +1,5 @@
 # Basic Maths 2
-Link for [[basic_maths|basic maths part 1]].
+Link for [[series_and_number_theory|basic maths part 1]].
 
 ## Sum of first $k$-gonal numbers:
 

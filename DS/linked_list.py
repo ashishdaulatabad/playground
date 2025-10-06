@@ -2,8 +2,8 @@ class node:
     """
     Node for singly linked list
     """
-    def __init__(self, data=None):
-        self.data, self.next = data, None
+    def __init__(self, data=None, next = None):
+        self.data, self.next = data, next
 
     def __str__(self) -> str:
         """
@@ -11,40 +11,35 @@ class node:
         """
         return '{}{}'.format(self.data, ' -> ' if self.next is not None else '')
 
-class singly_linked_list:
+class LinkedList:
     """
     Singly linked list
     """
     def __init__(self):
-        """
-        Initialize the singly linked list
-        """
         self.start_node, self.size = None, 0
 
     def __repr__(self):
-        """
-        Print all the nodes.
-        """
         string, traverse = '', self.start_node
+
         while traverse.next is not None:
             string += traverse.__str__()
             traverse = traverse.next
+
         return string + traverse.__str__()
 
     def __str__(self) -> str:
-        """
-        Print all the nodes.
-        """
         string, traverse = '', self.start_node
-        while traverse.has_next():
+
+        while traverse.next is not None:
             string += traverse.__str__()
             traverse = traverse.next
+
         return string + traverse.__str__()
     
     def __iadd__(self, data):
         """
         Add at the end
-        >>> a = singly_linked_list()
+        >>> a = LinkedList()
         >>> a += 2
         >>> a += 4
         >>> a
@@ -54,21 +49,22 @@ class singly_linked_list:
         >>> a
         2 -> 4 -> 3 -> 6
         """
-        new_node = node(data)
-        traversal_node = self.start_node
-        if traversal_node is None:
-            self.start_node = new_node
-            return self
-        while traversal_node.next is not None:
-            traversal_node = traversal_node.next
-        traversal_node.next = new_node
-        self.size += 1
+        if self.start_node is None:
+            self.start_node, self.size = node(data), 1
+        else:
+            traversal_node = self.start_node
+
+            while traversal_node.next is not None:
+                traversal_node = traversal_node.next
+
+            traversal_node.next, self.size = node(data), self.size + 1
+
         return self
 
     def insert_at(self, data, pos=None) -> None:
         """
         Inserts data at a certain position.
-        >>> a = singly_linked_list()
+        >>> a = LinkedList()
         >>> a += 2
         >>> a += 4
         >>> a
@@ -117,7 +113,7 @@ class singly_linked_list:
         """
         Deletes the node at position `pos`. Returns none.
         Inserts data at a certain position.
-        >>> a = singly_linked_list()
+        >>> a = LinkedList()
         >>> a += 2
         >>> a += 4
         >>> a += 3
@@ -159,7 +155,7 @@ class singly_linked_list:
             traverse_node.next = None
             del traverse_node
 
-class circular_singly_linked_list:
+class CircularLinkedList:
     """
     Singly linked list
     """
@@ -192,7 +188,7 @@ class circular_singly_linked_list:
     def __iadd__(self, data):
         """
         Add at the end
-        >>> a = circular_singly_linked_list()
+        >>> a = CircularLinkedList()
         >>> a += 2
         >>> a += 4
         >>> a
@@ -202,23 +198,25 @@ class circular_singly_linked_list:
         >>> a
         2 -> 4 -> 3 -> 6 -> 
         """
-        new_node = node(data)
-        traversal_node = self.start_node
-        if traversal_node is None:
-            self.start_node = new_node
-            self.start_node.next = self.start_node
+        if self.start_node is None:
+            self.start_node = node(data)
+            self.start_node.next, self.size = self.start_node, 1
             return self
-        while traversal_node.next != self.start_node:
-            traversal_node = traversal_node.next
-        traversal_node.next = new_node
-        new_node.next = self.start_node
+
+        traverse = self.start_node
+
+        while traverse.next != self.start_node:
+            traverse = traverse.next
+
+        traverse.next = node(data, self.start_node)
         self.size += 1
+
         return self
 
     def insert_at(self, data, pos=None) -> None:
         """
         Inserts data at a certain position.
-        >>> a = circular_singly_linked_list()
+        >>> a = CircularLinkedList()
         >>> a += 2
         >>> a += 4
         >>> a
@@ -272,7 +270,7 @@ class circular_singly_linked_list:
         """
         Deletes the node at position `pos`. Returns none.
         Inserts data at a certain position.
-        >>> a = circular_singly_linked_list()
+        >>> a = CircularLinkedList()
         >>> a += 2
         >>> a += 4
         >>> a += 3

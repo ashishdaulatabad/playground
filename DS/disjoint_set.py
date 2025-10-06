@@ -1,4 +1,3 @@
-
 def intialize(set_size: int) -> list:
     """
     Initialize the parent vertex to itself.
@@ -10,7 +9,7 @@ def intialize(set_size: int) -> list:
     parent_list = [0, 1, 2, 3, 4]
     ```
     """
-    return [ vertex for vertex in range(set_size + 1) ]
+    return [vertex for vertex in range(set_size + 1)]
 
 def find_parent(parent_list: list, vertex: int) -> int:
     """

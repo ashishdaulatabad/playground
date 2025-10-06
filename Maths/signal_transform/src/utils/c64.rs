@@ -498,6 +498,25 @@ impl C64 {
         }
     }
 
+    #[inline]
+    pub fn pow_alt(self, power: u32) -> Self {
+        let x: [C64; 2] = [C64::unit(), self];
+        let eval = |res: Self, int: usize| {
+            let res = res * res * x[(int & 8) >> 3];
+            let res = res * res * x[(int & 4) >> 2];
+            let res = res * res * x[(int & 2) >> 1];
+            res * res * x[int & 1]
+        };
+
+        let mut res = C64::unit();
+        (0..7).rev().for_each(|i| {
+            let pow_int = 3 << (i << 2);
+            res = eval(res, (pow_int & (power as usize)) >> (i << 2));
+        });
+
+        res
+    }
+
     #[inline(always)]
     pub fn conj_swap(self) -> Self {
         Self {

@@ -445,8 +445,6 @@ The overall complexity: $O(|E|\cdot \log_2|E|+|E|\cdot \log_2|V|)$.
 
 We can see that the Kruskal traverses along the set of edges $E$. $\implies$ for denser graphs, $|E|\approx|V|^2$. So, Kruskal is ideal when graph is sparse, otherwise the complexity would turn to be $O(|V|^2\cdot \log_2|V|)$.
 
-**Also,** python code does not work for large data (Don't know why). C++ code is faster and efficient here.
-
 ### Why greedy approach works here?
 Assume that the $T_K=(E_K,V)$ being the set of edges of MST via Kruskal's algorithm, and $T=(E,V)$ is an actual minimum spanning.
 
@@ -666,11 +664,10 @@ int main () {
 ```
 
 Complexity: The time complexity is $O((|E|+|V|)\cdot \log_2|V|)$.
-Why?
 - For each edge, inserting pairs of edges/vertices in heap costs $O(\log_2|E|)$, but even for the worst case (i.e., $|E|\approx |V|^2$) $\log_2|E|=\log_2(|V|^2)=2\cdot \log_2|V|$. So we neglect the constant $2$. 
 - The loop of priority queue is the same to Depth First Search, (only difference is heap $H$). This takes $O(|E|+|V|)$.
 
-When the graph is dense, Kruskal's algorithm is infeasible to use. Prim's algorithm is faster when the graph is dense.
+When the graph is dense, Kruskals algorithm is infeasible to use (Complexity: $O(|V|^2\cdot \log_2(V))$). Prim's algorithm is faster when the graph is more interconnected.
 
 ```ad-warning
 The above solution inserts the vertex with weight directly into heap without comparing whether that vertex is already in the heap with greater weight or not. We can modify the values in-place by using an ordered set or using modified version of heap or priority queue, so that the values can be tracked and replaced. Same can be done with [[graphs_2#Dijkstra's Shortest Path Algorithm|Dijkstra's Algorithm]].

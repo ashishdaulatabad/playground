@@ -3,13 +3,9 @@ class heap:
     Generalize binary heap, arranges elements according to the 
     comparison operator, by default initializes max heap.
     """
-    def __init__(self, comparison_operator):
+    def __init__(self, cmp = lambda root, child: root >= child):
         self.heap_array = []
-        if comparison_operator is not None:
-            self.comparison_operator = comparison_operator
-        else:
-            # default max heap
-            self.comparison_operator = lambda root, child: root >= child
+        self.comparison_operator = cmp
 
     def push(self, item):
         """
@@ -19,11 +15,12 @@ class heap:
         ha, co = self.heap_array, self.comparison_operator
         ha.append(item)
         last_index = len(ha) - 1
+        parent = (last_index - 1) >> 1
         # rearrange the added element such the parent-children condition should be satisfied.
         # so swap until the parent-child is not satisfied.
-        while last_index and not(co(ha[(last_index - 1) // 2], ha[last_index])):
-            ha[last_index], ha[(last_index - 1)//2] = ha[(last_index - 1)//2], ha[last_index]
-            last_index = (last_index - 1) // 2
+        while last_index and not(co(ha[parent], ha[last_index])):
+            ha[last_index], ha[parent] = ha[parent], ha[last_index]
+            last_index, parent = parent, (parent - 1) >> 1
 
     def heapify(self):
         """
@@ -73,6 +70,7 @@ class heap:
         """
         if len(self.heap_array) == 0:
             return None
+
         self.heap_array[0], self.heap_array[-1] = self.heap_array[-1], self.heap_array[0]
         item_to_return = self.heap_array.pop()
         self.heapify()

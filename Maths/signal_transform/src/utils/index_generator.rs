@@ -11,33 +11,23 @@ pub struct IndexGen {
 }
 
 impl IndexGen {
-    const fn trailing_zeroes_and_len(mut value: usize) -> (usize, usize) {
+    const fn trailing_zeroes_and_len(value: usize) -> (usize, usize) {
         if value == 0 {
             return (0, 0);
         }
 
-        let mut count_trailing_zeroes = 0;
-        let mut count_digits = 0;
+        let count_trailing_zeroes = value.trailing_zeros() as usize;
+        let length = 64 - value.leading_zeros() as usize;
 
-        while (value & 1) == 0 {
-            count_trailing_zeroes += 1;
-            value >>= 1;
-        }
-        while value != 0 {
-            count_digits += 1;
-            value >>= 1;
-        }
-
-        (count_trailing_zeroes, count_trailing_zeroes + count_digits)
+        (count_trailing_zeroes, length)
     }
 
     pub const fn new(len: usize) -> Self {
         let (trailing, digit_len) = Self::trailing_zeroes_and_len(len);
         let head_log = trailing;
-        let head_lim = 1
-            << (digit_len
-                - trailing
-                - if len.is_power_of_two() { 1 } else { 0 });
+        let shift =
+            digit_len - trailing - if len.is_power_of_two() { 1 } else { 0 };
+        let head_lim = 1 << shift;
 
         Self {
             len,
@@ -51,7 +41,7 @@ impl IndexGen {
         }
     }
 
-    #[inline]
+    #[inline(always)]
     pub const fn get_base_size(&self) -> usize {
         self.len >> self.head_log
     }

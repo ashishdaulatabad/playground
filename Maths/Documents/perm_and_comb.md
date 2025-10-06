@@ -5,7 +5,7 @@ For e.g., total permutation set of a set $S=\{1,2,3\}$ are $P(S)=\lbrace\lbrace1
 
 Total permutation of $r$ objects out of $n$ objects is denoted by $P^n_r$.
 In above case it's $P^3_3=6$.
-Generalizing for $n$ and $r$, ${}^nP_r=\dfrac{n!}{(n-r)!}$, where $n!$ is a [[basic_maths#Factorial of a number|factorial operation]]. 
+Generalizing for $n$ and $r$, ${}^nP_r=\dfrac{n!}{(n-r)!}$, where $n!$ is a [[series_and_number_theory#Factorial of a number|factorial operation]]. 
 
 ```haskell
 -- haskell code --
@@ -118,7 +118,7 @@ Now, putting $a=b=1$ in expression $(a+b)^n$ we get result:
 
 $$\sum\limits_{i=0}^n{}^nC_i=2^n$$
 
-This also states that there are $2^n$ terms generated after multiplying terms $(a+b)$ '$n$' times. This is also used in constructing a [[basic_maths#Pascal Triangle|pascal triangle]].
+This also states that there are $2^n$ terms generated after multiplying terms $(a+b)$ '$n$' times. This is also used in constructing a [[series_and_number_theory#Pascal Triangle|pascal triangle]].
 
 ### Corollary
 
@@ -394,8 +394,8 @@ $$
 P(A)=\dfrac{|!n|}{|n!|}=\dfrac{\left(\dfrac{n!}{e}\right)}{n!}=\dfrac1e
 $$
 
-This happens when $n$ is too big of a number or $n\rightarrow \infty$.
-A good explaination is also given on [wikipedia](https://en.wikipedia.org/wiki/Derangement#Derivation_by_inclusion%E2%80%93exclusion_principle).
+The approximation can be made when $n$ is too big.
+A good explanation is also given on [wikipedia](https://en.wikipedia.org/wiki/Derangement#Derivation_by_inclusion%E2%80%93exclusion_principle).
 ___
 
 ```rust

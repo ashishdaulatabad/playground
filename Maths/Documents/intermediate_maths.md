@@ -411,7 +411,7 @@ def isqrt(n: int) -> int:
 
 
 ## Sieve of Eratosthenes
-Sieve of eratosthenes is a special method of marking [[basic_maths#Composite numbers|composite numbers]], leaving prime values unmarked: these values are then used to mark their multiples as composites. [A useful demonstration of this method can be found here](https://en.wikipedia.org/wiki/File:Sieve_of_Eratosthenes_animation.gif).
+Sieve of eratosthenes is a special method of marking [[series_and_number_theory#Composite numbers|composite numbers]], leaving prime values unmarked: these values are then used to mark their multiples as composites. [A useful demonstration of this method can be found here](https://en.wikipedia.org/wiki/File:Sieve_of_Eratosthenes_animation.gif).
 
 ```python
 def sieve_of_eratosthenes(n) -> list:

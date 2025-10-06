@@ -1,6 +1,7 @@
 #![feature(portable_simd)]
 
 use crate::fourier_transform::{fast_fft::fast_fft, faster_fft::faster_fft};
+use utils::c64::C64;
 use vector::Vector;
 
 mod cosine_transform;
@@ -8,7 +9,7 @@ mod fourier_transform;
 mod utils;
 
 fn main() {
-    let sz = 32767;
+    let sz = 1048576 << 3;
     let x = (0..sz).map(|c| c as f64).collect::<Vector<f64>>();
 
     let t = std::time::Instant::now();

@@ -16,20 +16,22 @@ def build(array: list, combine) -> list:
     """
     n = len(array)
     seg_tree_array = [0]*(n-1) + list(array)
+
     for x in range(n-2, -1, -1):
         seg_tree_array[x] = combine(seg_tree_array[(x << 1) + 1], seg_tree_array[(x << 1) + 2])
+
     return seg_tree_array
 
-def query( seg_tree_array: list, left: int, right: int, n: int, init: int, combine):
+def query(seg_tree_array: list, left: int, right: int, n: int, init: int, combine):
     """
     Query on segment tree
     :init is the initial value of result
-            
+    ```
               36
          10         26
       3     7    11    15
-    1  2  3  4  5  6  7  8        
-
+    1  2  3  4  5  6  7  8
+    ```
     >>> arr = [1, 2, 3, 4, 5, 6, 7, 8]
     >>> sum_f =  lambda a, b: a + b
     >>> seg = build(arr, sum_f)
@@ -53,25 +55,18 @@ def query( seg_tree_array: list, left: int, right: int, n: int, init: int, combi
     >>> query(seg, 0, 6, len(arr), 0, f)
     386
     """
-    result = init
-    left += n-1
-    iter = 0
-    right += n-1
+    result, left, right, iter = init, left + n - 1, right + n - 1, 0
+
     while left <= right:
-        # print('iter', iter, left, right)
         if not left & 1:
-            # print('l', left, seg_tree_array[left])
             result = combine(result, seg_tree_array[left])
             left += 1
         if right & 1:
-            # print('r', right, seg_tree_array[right])
             result = combine(result, seg_tree_array[right])
             right -= 1
-        left -= 1
-        left //= 2
-        right -= 1
-        right //= 2
+        left, right = (left - 1) >> 1, (right - 1) >> 1
         iter += 1
+
     return result
 
 def update(seg_tree_array: list, n: int, index: int, value: int, combine) -> int:
@@ -92,17 +87,12 @@ def update(seg_tree_array: list, n: int, index: int, value: int, combine) -> int
     >>> query(seg, 0, 6, len(arr), 0, f)
     412
     """
-    index += n-1
-    seg_tree_array[index] = value
-    index -= 1
-    index //= 2
+    seg_tree_array[index + n - 1] = value
+    index = (index + n - 2) >> 1
 
-    while index >= 0:
+    while index > 0:
         seg_tree_array[index] = combine(seg_tree_array[2*index + 1], seg_tree_array[2*index + 2])
-        index -= 1
-        index //= 2
-        if index == 0:
-            break
+        index = (index - 1) >> 1
 
 if __name__ == '__main__':
     from doctest import testmod

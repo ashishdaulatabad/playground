@@ -27,9 +27,8 @@ class stack:
         return the last inserted element
         """
         if len(self.__stack):
-            element = self.__stack[-1]
-            self.__stack.pop()
-            return element
+            return self.__stack.pop()
+
         raise Exception('Poping from an empty stack')
 
     def empty(self):

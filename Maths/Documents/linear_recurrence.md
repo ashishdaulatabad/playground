@@ -363,7 +363,7 @@ M =
 \end{bmatrix}
 $$
 
-Finding exponent for $k\times k$ matrix $M^n$ can be done in $O(\log_2(n))$ time ($n$: exponent) using [[basic_maths#Modular power function by Binary Exponentiation|binary exponent method]], where each matrix multiplication takes $O(k^3)$ time.
+Finding exponent for $k\times k$ matrix $M^n$ can be done in $O(\log_2(n))$ time ($n$: exponent) using [[series_and_number_theory#Modular power function by Binary Exponentiation|binary exponent method]], where each matrix multiplication takes $O(k^3)$ time.
 
 The overall complexity would be $O(k^3\cdot\log_2(n))$.
 
