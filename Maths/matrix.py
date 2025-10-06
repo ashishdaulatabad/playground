@@ -1,23 +1,23 @@
-
 class matrix:
     """
     Matrix class.
     >>> a = matrix([[1, 1], [1, 1]]); b = matrix([[1, 1], [1, 1]]); c = a + b; c
     [2, 2]
     [2, 2]
-    """
+        """
     def __init__(self, mat):
         """
         Constructor
         >>> a = matrix([[1, 2], [1]])
         Traceback (most recent call last):
-         ...
+            ...
         Exception: Each row should have a fixed width
         """
         if not all([len(mat[i]) == len(mat[i+1]) for i in range(len(mat) - 1)]):
             raise Exception('Each row should have a fixed width')
+
         self.mat = mat
-    
+        
     def __repr__(self):
         """
         Console value of matrix
@@ -93,6 +93,7 @@ class matrix:
         """
         if isinstance(b, int) or isinstance(b, float):
             return matrix([[self.mat[i][j] - b for j in range(len(self.mat[i]))] for i in range(len(self.mat))])
+
         assert(len(self.mat) == len(b.mat) and len(self.mat[0]) == len(b.mat[0]))
         return matrix([[self.mat[i][j] - b.mat[i][j] for j in range(len(b.mat[i]))] for i in range(len(b.mat))])
 
@@ -115,6 +116,7 @@ class matrix:
             for row in range(len(self.mat)):
                 for col in range(len(self.mat[row])):
                     self.mat[row][col] -= b
+
         elif isinstance(b, matrix):
             assert(len(self.mat) == len(b.mat) and len(self.mat[0]) == len(b.mat[0]))
             for row in range(len(self.mat)):
@@ -159,11 +161,12 @@ class matrix:
         [5, 6]
         """
         assert (isinstance(key, tuple) and len(key) == 2) or (isinstance(key, slice)) or isinstance(key, int)
+
         if isinstance(key, tuple):
             row_sel, col_sel = key
-    
+
             assert (isinstance(row_sel, slice) or isinstance(row_sel, int)) and \
-                   (isinstance(col_sel, slice) or isinstance(col_sel, int))
+                    (isinstance(col_sel, slice) or isinstance(col_sel, int))
 
             if isinstance(row_sel, slice):
                 row_indices = range(*row_sel.indices(len(self.mat)))
@@ -222,6 +225,8 @@ class matrix:
         >>> a.v_stack(b)
         >>> a.__shape__()
         (4, 2)
+        >>> a.is_square()
+        False
         """
         return len(self.mat) == len(self.mat[0])
 
@@ -231,8 +236,10 @@ class matrix:
         """
         c = []
         m, n, p = len(self.mat), len(self.mat[0]), len(second_matrix.mat[0])
+
         for row in range(m):
             c.append([sum ([self.mat[row][k] * second_matrix.mat[k][j] for k in range(n)]) for j in range(p)])
+
         return matrix(c)
 
     def strassen_multiplication(self, second_matrix):
@@ -249,7 +256,7 @@ class matrix:
 
         [Some clever adjustments can be made though](https://en.wikipedia.org/wiki/Strassen_algorithm#Implementation_considerations)
 
-        >>> sz = 128
+        >>> sz = 64
         >>> a = matrix([[i*sz + j + 1 for j in range(sz)] for i in range(sz)])
         >>> b = matrix([[i*sz + j + 1 for j in range(sz)] for i in range(sz)])
         >>> c = matrix([[1,2],[3,4]])
@@ -274,11 +281,11 @@ class matrix:
             return self.default_multiplication(second_matrix)
 
         row, col = self.__shape__()
-        if row % 2 == 0:
-            row2 = row // 2
+        if row & 1 == 0:
+            row2 = row >> 1
             a, b, c, d = self[:row2, :row2], self[:row2, row2:], self[row2:, :row2], self[row2:, row2:]
             e, f, g, h = second_matrix[:row2, :row2], second_matrix[:row2, row2:], \
-                         second_matrix[row2:, :row2], second_matrix[row2:, row2:]
+                            second_matrix[row2:, :row2], second_matrix[row2:, row2:]
             
             p1 = a.strassen_multiplication(f - h)
             p2 = (a + b).strassen_multiplication(h)
@@ -315,6 +322,7 @@ class matrix:
         Set self as identity matrix
         """
         assert self.is_square()
+
         for i, row in enumerate(self.mat):
             for index in range(len(row)):
                 row[index] = 1 if i == index else 0
@@ -324,21 +332,22 @@ class matrix:
         Multiplication based on type:
         for integer/float: scalar multiplication
         """
-        assert len(self.mat[0]) == len(a.mat)
         if isinstance(a, float) or isinstance(a, int):
             rowlen, collen = len(self.mat), len(self.mat[0])
             return matrix([[a * elem for elem in row] for row in self.mat])
         else:
+            assert len(self.mat[0]) == len(a.mat)
             return self.strassen_multiplication(a)
 
     def __imul__(self, a):
-        assert len(self.mat[0]) == len(a.mat)
         if isinstance(a, float) or isinstance(a, int):
             for row in self.mat:
                 for index in range(len(row)):
                     row[index] *= a
             return self
+
         else:
+            assert len(self.mat[0]) == len(a.mat)
             self = self.strassen_multiplication(a)
             return self
 
@@ -391,9 +400,11 @@ class matrix:
         [2, 2]
         """
         assert isinstance(num, int)
+
         for row in self.mat:
             for index in range(len(row)):
                 row[index] //= num
+
         return self
 
     def __mod__(self, num: int):
@@ -418,9 +429,11 @@ class matrix:
         [3, 3]
         """
         assert isinstance(num, int)
+
         for row in self.mat:
             for index in range(len(row)):
                 row[index] %= num
+
         return self
 
     def __pow__(self, num: int):
@@ -433,11 +446,13 @@ class matrix:
         [18, 18]
         """
         n, res = self[:,:], self.__identity__(len(self.mat))
+
         while num > 0:
             if num & 1:
                 res *= n
             n *= n
             num >>= 1
+
         return res
 
     def __ipow__(self, num: int):
@@ -451,11 +466,13 @@ class matrix:
         """
         n = self[:,:]
         self.__set_identity__()
+
         while num > 0:
             if num & 1:
                 self *= n
             n *= n
             num >>= 1
+
         return self
 
     def __is_identity__(self):
@@ -464,7 +481,7 @@ class matrix:
         """
         row, col = self.__shape__()
         return row == col and \
-              all([True if ((i == j and self.mat[i][j] == 1) or (i != j and self.mat[i][j] == 0)) else False for j in range(col) for i in range(row)])
+            all([True if ((i == j and self.mat[i][j] == 1) or (i != j and self.mat[i][j] == 0)) else False for j in range(col) for i in range(row)])
 
     def reduced_row_echelon_form(self):
         """
@@ -545,7 +562,7 @@ class matrix:
                 mat[row - 1], mat[row] = mat[row], mat[row - 1]
 
         mat.reduced_row_echelon_form()
-    
+
         return mat[:, n:]
 
     def strassen_inverse(self):
@@ -557,7 +574,7 @@ class matrix:
 
         >>> import random
         >>> import time
-        >>> sz = 128
+        >>> sz = 64
         >>> # randomness cannot be considered okay since there might be a chance for matrix whose det is zero
         >>> b = matrix([[random.randint(-100-sz,sz+100) for j in range(sz)] for i in range(sz)])
         >>> t1 = time.time()
@@ -581,7 +598,7 @@ class matrix:
         row, col = self.__shape__()
         # Threshold is kept as 50, below which the naive
         # inverse evaluation is faster.
-        if row <= 50:
+        if row <= 32:
             return self.gauss_jordan_inverse()
 
         if row % 2 == 0:

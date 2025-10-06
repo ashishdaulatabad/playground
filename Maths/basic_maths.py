@@ -1,29 +1,5 @@
 from intermediate_maths import isqrt
 
-def first_n_sum(n: int) -> int:
-    """
-    Returns the sum of first n positive integers
-    >>> first_n_sum(10)
-    55
-    >>> first_n_sum(100)
-    5050
-    >>> first_n_sum(9)
-    45
-    """
-    return (n * (n + 1)) // 2
-
-def first_n_squared_sum(n: int) -> int:
-    """
-    Returns the sum of first n squared positive integers
-    >>> first_n_squared_sum(10)
-    385
-    >>> first_n_squared_sum(100)
-    338350
-    >>> first_n_squared_sum(9)
-    285
-    """
-    return (n * (n + 1) * (2*n + 1)) // 6
-
 def power(number, exponent: int) -> int:
     """
     Evaluates number raise to exponent in O(logn), where logn is logarithm of number
@@ -139,27 +115,6 @@ def extended_euclidean_gcd(a: int, b: int):
     ```
     """
     pass
-
-def prime(n: int) -> bool:
-    """
-    Boolean check whether a number is prime
-    >>> prime(2)
-    True
-    >>> prime(1001)
-    False
-    >>> prime(104351)
-    False
-    >>> prime(104729)
-    True
-    """
-    sqrt_n = isqrt(n)
-    # Divisible by 2 check
-    if not(n & 1) and n != 2:
-        return False
-    for testn in range(3, sqrt_n + 1, 2):
-        if n % testn == 0:
-            return False
-    return True
 
 def pascal_triangle(n: int) -> list:
     """

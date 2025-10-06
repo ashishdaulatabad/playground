@@ -417,3 +417,4 @@ if __name__ == "__main__":
     c = time()
     faster = sudoku_greedy(board16_repr)
     print(f'Faster 16x16: {time() - c}s')
+    print(f'{naive == faster}')

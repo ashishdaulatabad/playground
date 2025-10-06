@@ -26,12 +26,12 @@ def query(seg_tree_array: list, left: int, right: int, n: int, init: int, combin
     """
     Query on segment tree
     :init is the initial value of result
-
+    ```
               36
          10         26
       3     7    11    15
     1  2  3  4  5  6  7  8
-
+    ```
     >>> arr = [1, 2, 3, 4, 5, 6, 7, 8]
     >>> sum_f =  lambda a, b: a + b
     >>> seg = build(arr, sum_f)

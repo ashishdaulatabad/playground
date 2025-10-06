@@ -1,77 +1,4 @@
-
 pi = 3.1415926535897932384626433832795028841971693993751058209749445923078164
-
-def sieve_of_eratosthenes(n: int) -> list:
-    """
-    Note that this generates a list of boolean array where ith 
-    position denotes whether a number is prime or not
-    """
-    # Already marked for i = 2
-    sieve = bytearray([0b10101100] + ([0b10101010] * ((n + 6) >> 3)))    
-    sqrt_n = isqrt(n)
-
-    # For each number < n, 
-    # If number is marked as prime (filtered by lambda function)
-    # Mark it's multiples to composite
-    for number in filter(lambda x: sieve[x >> 3] & (1 << (x & 7)) > 0, range(3, sqrt_n + 1)):
-        for (index, mark) in map(lambda x: (x >> 3, x & 7), range(number * number, n + 1, number << 1)):
-            sieve[index] &= 255 ^ (1 << mark)
-
-    return sieve
-
-def prime_with_sieve(number_list: list) -> list:
-    """
-    Return if an integer in the list is prime or not.
-    To refer how sieve works, refer sieve_of_eratosthenes function
-
-    >>> prime_with_sieve([2, 11, 22, 33, 41, 68, 97, 8831, 8849, 8850, 1299709])
-    [True, True, False, False, True, False, True, True, True, False, True]
-    """
-    sieve = sieve_of_eratosthenes(max(number_list) + 1)
-    return [sieve[number >> 3] & (1 << (number & 7)) > 0 for number in number_list]
-
-def segmented_sieve(left: int, right: int) -> list:
-    """
-    Generates prime check from left to right
-    - Create sieve from 1 to sqrt(right), with primes in the list
-    - For each prime in primes list:
-        - Get starting value divisible by prime (say st)
-        - Mark all the values from st to right (including right) which are divisible 
-    by prime.
-    """
-    upper_limit = isqrt(right)
-    sieve = [0 if i % 2 == 0 and i != 2 else 1 for i in range(upper_limit + 1)]
-    primes = [2]
-    for marker in range(3, upper_limit + 1, 2):
-        # If prime
-        if sieve[marker] == 1:
-            primes.append(marker)
-            for mark in range(marker * marker, upper_limit + 1, marker):
-                sieve[mark] = 0
-    
-    seg_sieve = [1] * (right - left + 1)
-    for prime in primes:
-        """
-        Start should be either (prime * prime) if the value lies in the range (left, right),
-        else find first value divisible by (prime)
-        """
-        start, end, skip = max(prime * prime, ((left + prime - 1) // prime) * (prime)), right + 1, prime
-        for mark in range(start, end, skip):
-            seg_sieve[mark - left] = 0
-    if left == 1:
-        seg_sieve[1] = 0
-    return seg_sieve
-
-def prime_with_segmented_sieve(number_list: list) -> list:
-    """
-    Calculates the prime within min(number_list) and max(number_list), and evaluates
-    primality test for all integers in the list
-    >>> prime_with_segmented_sieve([13466917, 20996011, 24036583, 25964952, 30402447, 32582657])
-    [1, 1, 1, 0, 0, 1]
-    """
-    left, right = min(number_list), max(number_list)
-    seg_sieve = segmented_sieve(left, right)
-    return [seg_sieve[number - left] for number in number_list] 
 
 def linear_recurrence(coefficient: list, base_cases: int, n: int, mod=0) -> int:
     """
@@ -198,6 +125,7 @@ def isqrt(n: int) -> int:
     141
     """
     xn = n // 2
+
     if xn != 0:
         xn_1 = (xn + n // xn) // 2
         while xn_1 < xn:

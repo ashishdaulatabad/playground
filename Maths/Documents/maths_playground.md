@@ -15,7 +15,7 @@ Here, $r$ is remainder by dividing with $p-1$.
 
 $$a^k\pmod{p} = (a\pmod{p})^k \pmod p$$
 
-3. When $p$ and $a$ are co-prime, the repetitive pattern limits to $\phi(p)$ (same as above, but the above pattern is easier to remember: when $p$ is prime, the inverse is $a^{p-2}$, if it's not prime, then evaluating [[basic_maths#Euler Totient function phi n|totient function]] is essential).
+3. When $p$ and $a$ are co-prime, the repetitive pattern limits to $\phi(p)$ (same as above, but the above pattern is easier to remember: when $p$ is prime, the inverse is $a^{p-2}$, if it's not prime, then evaluating [[series_and_number_theory#Euler Totient function phi n|totient function]] is essential).
 
 For e.g., for $a=5,\ k=9$, since $\gcd(5,\ 9)=1$, and $\phi(9)=6$, The following values will follow same mod values from $k \geq \phi(k)$.
 
@@ -39,8 +39,8 @@ $$
 $$
 
 - In this set of remainders for $9$:  $R(9)=\lbrace 1,\ 2,\ 4,\ 5,\ 7,\ 8\rbrace$, we can observe that $\forall\ r \in R(9), \quad \gcd(r,\ 9) = 1$.  These are called [residual reduced system modulo](https://en.wikipedia.org/wiki/Reduced_residue_system).
-- It's size count is the same to [[basic_maths#Euler Totient function phi n|euler's totient function]] ($\phi(9) = 6$). For $n > 2$, their sum $\sum\limits_{r\ \in\ R(n)}r$  evaluates to a multiple of $n$. In $R(9)$ case, $\sum\limits_{r\ \in\ R(9)}r = 27 = 0\ (\bmod 9)$.
-4. When $p$ and $a$ are not co-prime: [[basic_maths#Basic Math Coding problems for CS#Factors of number|Factoring]] $a$ as:
+- It's size count is the same to [[series_and_number_theory#Euler Totient function phi n|euler's totient function]] ($\phi(9) = 6$). For $n > 2$, their sum $\sum\limits_{r\ \in\ R(n)}r$  evaluates to a multiple of $n$. In $R(9)$ case, $\sum\limits_{r\ \in\ R(9)}r = 27 = 0\ (\bmod 9)$.
+4. When $p$ and $a$ are not co-prime: [[series_and_number_theory#Basic Math Coding problems for CS#Factors of number|Factoring]] $a$ as:
 
 $$a = p_1^{k_1}\cdot p_2^{k_2}\cdot p_3^{k_3}\cdots \ p_n^{k_n}$$
 
@@ -118,3 +118,18 @@ This would look like a full adder logic for one bit.
 
 The carry is eventually added to next bit (i.e., multiply by $2$ or shift bits by $1$).
 
+### Number divisibility.
+In a decimal system, there is a special property of $9$: every number that is divisible by $9$ has their sum of digits divisible by $9$.
+
+Observation: If we consider multiplication as series of additions, we observe few things:
+- In general, the number is balanced out with the immediate leading digits $<9$:
+  For e.g., In addition $45 + 9$, last digit is subtracted by $1$ and added to the leading digit ($=54$)
+- If the last digit is $0$, we're just adding $9$ (i.e., $90 + 9 = 99$).
+- However, if there are $9$'s in between, it's reduced to $0$, and transferred to digit which is $<9$.
+  For e.g., $891 + 9=900$, which are all divisible by $9$.
+Since all digits are either added or reduced by $9$, or balanced by adding $1$ and subtracting $1$ elsewhere, we're maintaining the digit sum to be $\equiv 0$.
+
+This trait of balance holds true for all $b-1$ number in a number system with base $b$.
+E.g., A hypothetical system with base $b=6$, and number $41_{6}=25_{10}$, we can easily check for ($b - 1 = 5$) if $41_{6}\mod 5_{6} \equiv 0$.
+
+Likewise in computers, it's easier to check the divisibility of large integers with numbers of form $2^{n}-1$. We can group $n$ bits and add them in a variable to see whether the resultant sum of digits in base $b=2^{n}$ is divisible by $2^{n}-1$. 

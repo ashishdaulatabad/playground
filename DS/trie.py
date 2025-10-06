@@ -18,7 +18,6 @@ class trie:
     >>> a = trie(); a += "apple"; a += "application"; a += "apply"; a += "baseball"; a += "bases"; a += 'acid'; a.suggest('app')
     ['apply', 'application', 'apple']
     """
-    
     def __init__(self):
         """
         Constructor for trie

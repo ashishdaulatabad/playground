@@ -7,7 +7,7 @@ To solve such problems we need to identify what are the possible next steps from
 # One Dimensional
 
 ## Fibonacci Series
-[[basic_maths#Fibonacci series|Fibonacci series]] uses a recurrence relation:
+[[series_and_number_theory#Fibonacci series|Fibonacci series]] uses a recurrence relation:
 
 $$
 fib(n)=\begin{cases}

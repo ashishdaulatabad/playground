@@ -19,7 +19,6 @@ def fibonacci_recursive(n: int) -> int:
 def fibonacci_recursive_2(n: int) -> int:
     """
     Solves fibonacci recurrence relation, significantly faster than the naive method.
-    Since each of f(n - k) term is expanded till n == 1.
     
     ```
     f(n) = f(n >> 1) * (f(n >> 1) + 2 * f((n >> 1) - 1));    n > 1, n % 2 == 0
@@ -35,6 +34,8 @@ def fibonacci_recursive_2(n: int) -> int:
     102334155
     >>> fibonacci_recursive_2(200) == fibonacci_rec_dynamic({}, 200)
     True
+    >>> fibonacci_recursive_2(500) == fibonacci_rec_dynamic({}, 500)
+    True
     >>> fibonacci_recursive_2(199) == fibonacci_rec_dynamic({}, 199)
     True
     """
@@ -43,7 +44,7 @@ def fibonacci_recursive_2(n: int) -> int:
     elif n & 1 == 1:
         fn_2 = fibonacci_recursive_2(n >> 1)
         fn_2_p_1 = fibonacci_recursive_2((n >> 1) + 1)
-        return fn_2 ** 2 + fn_2_p_1 ** 2
+        return fn_2 * fn_2 + fn_2_p_1 * fn_2_p_1
     
     fn = fibonacci_recursive_2(n >> 1)
     return fn * (2 * fibonacci_recursive_2((n >> 1) - 1) + fn)
@@ -69,12 +70,25 @@ def fibonacci_rec_dynamic(memo: dict, n: int) -> int:
     >>> fibonacci_rec_dynamic({}, 100)
     354224848179261915075
     """
-    memo[n] = (memo[n] if n in memo else n if n <= 1 else (fibonacci_rec_dynamic(memo, n - 1) + fibonacci_rec_dynamic(memo, n - 2)))
+    if n <= 1:
+        return n
+    if n in memo:
+        return memo[n]
+    memo[n] = (fibonacci_rec_dynamic(memo, n - 1) + fibonacci_rec_dynamic(memo, n - 2))
     return memo[n]
 
 def fibonacci_mat_expo(n: int, mod=0) -> int:
     """
-    Returns fibonacci in O(logn) time
+    Returns fibonacci in O(logn) time using matrix exponentiation.
+    The matrix exponentiation is done using the following relation:
+    ```
+    | 0 1 |^n = | f(n)   f(n + 1) |
+    | 1 1 |     | f(n + 1) f(n + 2) |
+    ```
+
+    The matrix is raised to the power n, and the top right element
+    of the resulting matrix is f(n).
+    If mod is provided, the result is returned modulo mod.
     
     >>> fibonacci_mat_expo(100, 0)
     354224848179261915075
