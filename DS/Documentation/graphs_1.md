@@ -486,7 +486,7 @@ def prims_algorithm(adj_matrix: list, start_vertex: int, total_vertices: int):
         def __init__(self, comparison_operator=None):
             self.heap_array = []
             if comparison_operator is not None:
-                self.comparison_operator = comparison_operator
+                se[]()lf.comparison_operator = comparison_operator
             else:
                 # default max heap
                 self.comparison_operator = lambda root, child: root >= child

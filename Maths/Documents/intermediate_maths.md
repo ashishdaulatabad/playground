@@ -414,25 +414,34 @@ def isqrt(n: int) -> int:
 Sieve of eratosthenes is a special method of marking [[series_and_number_theory#Composite numbers|composite numbers]], leaving prime values unmarked: these values are then used to mark their multiples as composites. [A useful demonstration of this method can be found here](https://en.wikipedia.org/wiki/File:Sieve_of_Eratosthenes_animation.gif).
 
 ```python
-def sieve_of_eratosthenes(n) -> list:
+def sieve_of_eratosthenes(n: int) -> list:
     """
-    Note that this generates a list of boolean array where ith 
-    position denotes whether a number is prime or not
-
-    Optimization: 
-    - The list can be reduced by checking only odd numbers.
-    - Using bitsets instead of array of boolean
+    Note that this generates a list of boolean bytearray where nth 
+    bit in bytearray denotes whether n is prime or not
     """
     # Already marked for i = 2
-    sieve = [False if (i % 2 == 0 and i > 2 and i != 0) else True for i in range(n+1)]
+    sieve = bytearray([0b10101100] + ([0b10101010] * ((n + 6) >> 3)))    
     sqrt_n = isqrt(n)
-    for number in range(3, sqrt_n + 1):
-        # If number is marked as prime
-        if sieve[number]:
-            # Mark it's multiples as not prime
-            for marker in range(number * number, n + 1, number):
-                sieve[marker] = False
+
+    # For each number < n, 
+    # If number is marked as prime (filtered by lambda function)
+    # Mark it's multiples to composite
+    for number in filter(lambda x: sieve[x >> 3] & (1 << (x & 7)) > 0, range(3, sqrt_n + 1)):
+        for (index, mark) in map(lambda x: (x >> 3, x & 7), range(number * number, n + 1, number << 1)):
+            sieve[index] &= 255 ^ (1 << mark)
+
     return sieve
+
+def prime_with_sieve(number_list: list) -> list:
+    """
+    Return if an integer in the list is prime or not.
+    To refer how sieve works, refer sieve_of_eratosthenes function
+
+    >>> prime_with_sieve([2, 11, 22, 33, 41, 68, 97, 8831, 8849, 8850, 1299709])
+    [True, True, False, False, True, False, True, True, True, False, True]
+    """
+    sieve = sieve_of_eratosthenes(max(number_list) + 1)
+    return [sieve[number >> 3] & (1 << (number & 7)) > 0 for number in number_list]
 ```
 
 Note that the array is pre-computed upto $n$ positive integers, so after computing for $n$ values and storing in array, primality check becomes $O(1)$. 

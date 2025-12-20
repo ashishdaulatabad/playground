@@ -5,5 +5,5 @@
 	path = Maths/Expression
 	url = https://github.com/toastedbreadandomelette/expression
 [submodule "parser"]
-	path = parser
+	path = parser/json_parser
 	url = https://github.com/toastedbreadandomelette/parser
