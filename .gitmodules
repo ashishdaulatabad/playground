@@ -4,6 +4,6 @@
 [submodule "Maths/Expression"]
 	path = Maths/Expression
 	url = https://github.com/toastedbreadandomelette/expression
-[submodule "parser"]
+[submodule "parser/json_parser"]
 	path = parser/json_parser
 	url = https://github.com/toastedbreadandomelette/parser
