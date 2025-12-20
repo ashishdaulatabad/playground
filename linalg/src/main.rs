@@ -9,6 +9,6 @@ mod matmul_modulo;
 fn main() {
     let sz = 1024;
     matmul::matmul(sz);
-    // inv::inverse(sz);
+    inv::inverse(sz);
     // matmul_modulo::matmul_mod();
 }

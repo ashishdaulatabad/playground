@@ -338,8 +338,64 @@ pub fn test_merge_sort() {
   );
 }
 
-fn main() {
-  let sz = 10000000;
+// Sorting specifically based on bucket value.
+fn radix_sort(array: &mut [u32]) {
+  let mut other: Vec<u32> = Vec::new();
+  other.resize_with(array.len(), || 0);
+  // First pass
+  let mut pass = 1;
+  let (mut count_ones, mut ptr_forward, mut ptr_reverse): (usize, usize, usize) = (
+    0, 0, array.len() - 1
+  );
+  let (mut anded, mut next_anded) = (1, 2);
+  
+  array.iter().for_each(|elem| {
+    count_ones += ((*elem & next_anded) >> pass) as usize;
+
+    if *elem & anded == 0 {
+      other[ptr_forward] = *elem;
+      ptr_forward += 1;
+    } else {
+      other[ptr_reverse] = *elem;
+      ptr_reverse -= 1;
+    }
+  });
+
+  
+  while count_ones != 0 {
+    let mut new_count_ones: usize = 0;
+    pass += 1;
+    (ptr_forward, ptr_reverse) = (0, array.len() - count_ones);
+    (anded, next_anded) = (anded << 1, next_anded << 1);
+
+    let (mut from, mut to): (&mut [u32], &mut [u32]) = if pass & 1 == 1 {
+      (array, &mut other)
+    } else {
+      (&mut other, array)
+    };
+
+    from.iter().for_each(|f| {
+      new_count_ones += ((*f & next_anded) >> pass) as usize;
+      
+      if *f & anded == 0 {
+        to[ptr_forward] = *f;
+        ptr_forward += 1;
+      } else {
+        to[ptr_reverse] = *f;
+        ptr_reverse += 1;
+      }
+    });
+    count_ones = new_count_ones;
+  }
+
+  if pass & 1 == 1 {
+    array.copy_from_slice(&other);
+  }
+}
+
+#[test]
+fn test_radix_sort() {
+  let sz = 128;
   {
     let mut s = (0..=sz)
       .into_iter()
@@ -347,7 +403,26 @@ fn main() {
       .collect::<Vec<u32>>();
 
     let t = std::time::Instant::now();
-    merge_sort(&mut s, &|curr, next| curr < next);
+    radix_sort(&mut s);
+    println!("{}ms", t.elapsed().as_millis());
+
+    assert_eq!(
+      (0..=sz).into_iter().collect::<Vec<u32>>(),
+      s
+    );
+  }
+}
+
+fn main() {
+  let sz = 10485760;
+  {
+    let mut s = (0..=sz)
+      .into_iter()
+      .rev()
+      .collect::<Vec<u32>>();
+
+    let t = std::time::Instant::now();
+    radix_sort(&mut s);
     println!("{}ms", t.elapsed().as_millis());
 
     assert_eq!(

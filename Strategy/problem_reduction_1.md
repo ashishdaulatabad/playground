@@ -27,58 +27,58 @@ $$res=\max\limits_{v\ \in\ p,\ in[v]=0}(d(p,in,v))$$
 
 ```python
 def longest_increasing_path(self, matrix: List[List[int]]) -> int:
-	"""
-	Solves the current problem by converting the matrix into an
-	adjacent graph. The function max_dep can be sped up by
-	converting into a iterative function.
-	"""
-	m, n = len(matrix), len(matrix[0])
-	sz = m*n
-	mt = matrix
-	# Adjacency matrix and memo for storing the values.
-	p, memo = [[] for x in range(sz)], [1]*sz
-	vis = [False]*sz
-	in_deg_0 = set(list(range(sz)))
-	# Transform 2-D grid indexes into a linear ones.
-	transform = lambda x, y, n: x * n + y
-	
-	def max_dep(vis, vertex):
-		vis[vertex] = True
-		ans = 1
-		for x in p[vertex]:
-			if not vis[x]:
-				ans = max(ans, 1 + max_dep(vis, x))
-			else:
-				ans = max(ans, 1 + memo[x])
-		memo[vertex] = ans 
-		return ans
-		
-	# Create an adjacent matrix with given condition
-	# if adjacent values in a matrix is greater, then add
-	# it as an edge, also, the outgoing vertex will have an
-	# incoming edges, remove those.	
-	for x in range(m):
-		for y in range(n):
-			v = transform(x,y,n)
-			if x > 0 and mt[x-1][y] > mt[x][y]:
-				p[v].append(v-n)
-				in_deg_0.discard(v-n)
-			if x < m-1 and mt[x+1][y] > mt[x][y]:
-				p[v].append(v+n)
-				in_deg_0.discard(v+n)
-			if y > 0 and mt[x][y-1] > mt[x][y]:
-				p[v].append(v-1)
-				in_deg_0.discard(v-1)
-			if y < n-1 and mt[x][y+1] > mt[x][y]:
-				p[v].append(v+1)
-				in_deg_0.discard(v+1)
-		
-	max_d = 0
-	# Only consider those vertex that have zero incoming edges.
-	for x in list(in_deg_0):
-		max_d = max(max_d, max_dep(vis, x))
+  """
+  Solves the current problem by converting the matrix into an
+  adjacent graph. The function max_dep can be sped up by
+  converting into a iterative function.
+  """
+  m, n = len(matrix), len(matrix[0])
+  sz = m*n
+  mt = matrix
+  # Adjacency matrix and memo for storing the values.
+  p, memo = [[] for x in range(sz)], [1]*sz
+  vis = [False]*sz
+  in_deg_0 = set(list(range(sz)))
+  # Transform 2-D grid indexes into a linear ones.
+  transform = lambda x, y, n: x * n + y
+  
+  def max_dep(vis, vertex):
+    vis[vertex] = True
+    ans = 1
+    for x in p[vertex]:
+      if not vis[x]:
+        ans = max(ans, 1 + max_dep(vis, x))
+      else:
+        ans = max(ans, 1 + memo[x])
+    memo[vertex] = ans 
+    return ans
+    
+  # Create an adjacent matrix with given condition
+  # if adjacent values in a matrix is greater, then add
+  # it as an edge, also, the outgoing vertex will have an
+  # incoming edges, remove those.  
+  for x in range(m):
+    for y in range(n):
+      v = transform(x,y,n)
+      if x > 0 and mt[x-1][y] > mt[x][y]:
+        p[v].append(v-n)
+        in_deg_0.discard(v-n)
+      if x < m-1 and mt[x+1][y] > mt[x][y]:
+        p[v].append(v+n)
+        in_deg_0.discard(v+n)
+      if y > 0 and mt[x][y-1] > mt[x][y]:
+        p[v].append(v-1)
+        in_deg_0.discard(v-1)
+      if y < n-1 and mt[x][y+1] > mt[x][y]:
+        p[v].append(v+1)
+        in_deg_0.discard(v+1)
+    
+  max_d = 0
+  # Only consider those vertex that have zero incoming edges.
+  for x in list(in_deg_0):
+    max_d = max(max_d, max_dep(vis, x))
 
-	return max_d
+  return max_d
 ```
 
 This solution is a bit different than mentioned in [[memoization_2d_1#Longest Increasing Paths in a Grid https leetcode com problems longest-increasing-path-in-a-matrix|here]], but the construction of adjacency graph $p$ to convert it to an directed graph with no loops: is what makes it different from the previous method.
